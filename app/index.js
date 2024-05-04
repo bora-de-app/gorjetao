@@ -1,20 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image } from "react-native";
+import { AppName, Subtitle } from "../components/text";
+
+import Icon from "../assets/home-icon.png";
+import { PrimaryButton } from "../components/button";
+import { LayoutCenter } from "../components/container";
+import { useNavigation } from "expo-router";
 
 export default function App() {
+  const navigation = useNavigation();
+
+  const goToHome = () => {
+    navigation.navigate("home");
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <LayoutCenter
+      style={{
+        padding: 32,
+        flex: 1,
+        justifyContent: "space-between",
+      }}
+    >
+      <LayoutCenter>
+        <AppName />
+        <Subtitle text="Calcule a gorjeta e divida a conta" />
+      </LayoutCenter>
+
+      <Image source={Icon} />
+
+      <PrimaryButton label="Calcular" onPress={goToHome} />
+    </LayoutCenter>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
