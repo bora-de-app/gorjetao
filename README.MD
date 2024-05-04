@@ -19,9 +19,9 @@
 
 ![screenshot](https://raw.githubusercontent.com/bora-de-app/gorjetao/main/github/index.png)
 
-https://github.com/bora-de-app/gorjetao/raw/main/github/card-value.mov
+![screenshot](https://raw.githubusercontent.com/bora-de-app/gorjetao/main/github/card-value.gif)
 
-https://github.com/bora-de-app/gorjetao/raw/main/github/payment.mov
+![screenshot](https://raw.githubusercontent.com/bora-de-app/gorjetao/main/github/payment.gif)
 
 ## Techs
 
