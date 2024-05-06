@@ -7,7 +7,7 @@
   <br>
 </h1>
 
-<h4 align="center">A multiplatform application for calculating tips and dividing bills created in community classes <a href="https://boradeapp.com" target="_blank">Let's go APP</a>.</h4>
+<h4 align="center">A multiplatform application for calculating tips and dividing bills created in community classes <a href="https://boradeapp.com" target="_blank">Bora de APP</a>.</h4>
 
 <p align="center">
   <a href="#tech">Techs</a> •
