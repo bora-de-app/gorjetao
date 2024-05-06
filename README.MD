@@ -30,6 +30,7 @@
 * Expo Router
 * Styled Components
 * Moti for animations
+* Context API
 
 ## Features
 
@@ -37,6 +38,7 @@
 * Drawer Animations
 * Tips calculator
 * Payment by people
+* Context API
 
 ## How to use
 

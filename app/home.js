@@ -11,9 +11,12 @@ import { FlatList, View, Text } from "react-native";
 import { TextBold } from "../components/text/styles";
 import { useState } from "react";
 import Drawer from "../components/drawer";
+import { useValueContext } from "../providers/valueProvider";
 
 export default function Home() {
-  const [value, setValue] = useState(100);
+  const { value, setValue } = useValueContext();
+  //const [value, setValue] = useState(100);
+
   const [selectedTipOption, setSelectedTipOption] = useState();
   const [peopleAtTable, setPeopleAtTable] = useState(1);
   const [valueDrawerVisible, setValueDrawerVisible] = useState(false);
@@ -49,11 +52,7 @@ export default function Home() {
         <LayoutCenter style={{ gap: 32 }}>
           <Title text="Pagamento" />
 
-          <Card
-            title={value}
-            subtitle="Total da conta"
-            onPress={toggleValueDrawer}
-          />
+          <Card subtitle="Total da conta" onPress={toggleValueDrawer} />
 
           <LayoutLeft style={{ gap: 32 }}>
             <LayoutLeft style={{ gap: 16 }}>
@@ -111,21 +110,13 @@ export default function Home() {
         <PrimaryButton label="Calcular" onPress={togglePaymentDrawer} />
       </LayoutCenter>
 
-      <Drawer.Value
-        value={value}
-        visible={valueDrawerVisible}
-        onClose={toggleValueDrawer}
-        onValueChange={(newValue) => {
-          setValue(newValue);
-        }}
-      />
+      <Drawer.Value visible={valueDrawerVisible} onClose={toggleValueDrawer} />
 
       <Drawer.Payment
-        value={value}
         visible={paymentDrawerVisible}
         onClose={togglePaymentDrawer}
-        peopleAtTable={peopleAtTable}
         tipOption={selectedTipOption}
+        peopleAtTable={peopleAtTable}
       />
     </View>
   );

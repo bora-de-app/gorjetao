@@ -8,6 +8,7 @@ import { useEffect, useMemo, useState } from "react";
 import { PaymentCard } from "../card";
 import { LayoutCenter, LayoutLeft } from "../container";
 import { formatMoney } from "../../utils/formatMoney";
+import { useValueContext } from "../../providers/valueProvider";
 
 const DRAWER_PADDING = 32;
 
@@ -76,57 +77,44 @@ const Drawer = ({ offsetY = 200, children, visible, onBackdropPress }) => {
   );
 };
 
-const DrawerValue = ({ visible, onClose, value, onValueChange }) => {
+const DrawerValue = ({ visible, onClose }) => {
+  const { value, setValue } = useValueContext();
+
   return (
     <Drawer visible={visible} onBackdropPress={onClose}>
       <Title text="Total da conta" />
 
-      <Value
-        value={value}
-        size="large"
-        editable
-        onValueChange={onValueChange}
-      />
+      <Value value={value} size="large" editable onValueChange={setValue} />
 
       <PrimaryButton label="Alterar Valor" onPress={onClose} />
     </Drawer>
   );
 };
 
-const DrawerPayment = ({
-  visible,
-  onClose,
-  value,
-  peopleAtTable,
-  tipOption,
-}) => {
+const DrawerPayment = ({ visible, onClose, tipOption, peopleAtTable }) => {
+  const { value } = useValueContext();
+
+  const totalValue = tipOption ? value + (value * tipOption) / 100 : value;
+
+  const valueByPerson = totalValue / peopleAtTable;
+
   const [payments, setPayments] = useState([]);
 
-  const totalValue = useMemo(() => {
-    if (tipOption) {
-      return value + (value * tipOption) / 100;
-    }
-
-    return value;
-  }, [value, tipOption]);
-
-  const pendingValue = payments.reduce((previousValue, currentValue) => {
-    return !currentValue.paid
-      ? previousValue + currentValue.value
-      : previousValue;
-  }, 0);
-
-  const valueByPerson = useMemo(() => {
-    return totalValue / peopleAtTable;
-  }, [totalValue, peopleAtTable]);
+  const pendingPayments = useMemo(() => {
+    return payments.reduce(
+      (prevValue, currentValue) =>
+        !currentValue.paid ? prevValue + currentValue.value : prevValue,
+      0
+    );
+  }, [payments]);
 
   useEffect(() => {
     setPayments(
-      Array(peopleAtTable).fill({ value: valueByPerson, paid: false })
+      Array(peopleAtTable).fill({ paid: false, value: valueByPerson })
     );
-  }, [valueByPerson]);
+  }, [valueByPerson, peopleAtTable]);
 
-  const togglePaidStatus = (index) => {
+  const handlePayment = (index) => {
     setPayments((prevPayments) => {
       return prevPayments.map((prevPayment, prevPaymentIndex) => {
         if (prevPaymentIndex === index) {
@@ -139,24 +127,23 @@ const DrawerPayment = ({
   };
 
   return (
-    <Drawer visible={visible} onBackdropPress={onClose} offsetY={80}>
+    <Drawer offsetY={80} visible={visible} onBackdropPress={onClose}>
       <LayoutCenter style={{ gap: 32 }}>
         <Title text="Resultado" />
 
         <Value value={totalValue} size="medium" />
 
-        <LayoutLeft style={{ gap: 8 }}>
+        <LayoutLeft style={{ gap: 16 }}>
           <Title text="Valor por pessoa" />
 
-          {payments.map((payment, index) => {
+          {payments.map((item, index) => {
             return (
               <PaymentCard
                 key={`payment-${index}`}
-                value={payment.value}
-                paid={payment.paid}
+                value={item.value}
+                paid={item.paid}
                 onPress={() => {
-                  console.log("on press", index);
-                  togglePaidStatus(index);
+                  handlePayment(index);
                 }}
               />
             );
@@ -166,8 +153,11 @@ const DrawerPayment = ({
 
       <LayoutCenter style={{ gap: 16 }}>
         <Title text="Valor pendente" />
+
         <PrimaryButton
-          label={pendingValue === 0 ? "Finalizado" : formatMoney(pendingValue)}
+          label={
+            pendingPayments > 0 ? formatMoney(pendingPayments) : "Finalizado"
+          }
           onPress={onClose}
         />
       </LayoutCenter>

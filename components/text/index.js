@@ -1,5 +1,5 @@
-import { TextBold, TextRegular } from "./styles";
 import { formatMoney } from "../../utils/formatMoney";
+import { TextBold, TextRegular } from "./styles";
 
 export const AppName = () => {
   return <TextBold fontSize={24}>Gorjetão</TextBold>;
@@ -34,13 +34,13 @@ export const Value = ({
 
   const currentSize = sizes[size] ?? sizes[defaultValueSize];
 
-  const valueToShow = !editable ? formatMoney(value) : value;
+  const valueToShow = editable ? value : formatMoney(value);
 
   return (
     <TextBold
-      paid={paid}
       fontSize={currentSize}
       editable={editable}
+      paid={paid}
       keyboardType="numeric"
       onChangeText={(newText) => {
         onValueChange(parseFloat(newText));

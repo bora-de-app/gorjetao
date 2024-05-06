@@ -18,4 +18,6 @@ export const PaymentCardContainer = styled.TouchableOpacity.attrs({
   padding: ${(props) => (props.paid ? "8px" : "16px")};
   background-color: #ffffff;
   border: 1px solid ${(props) => (props.paid ? "#4DBBA4" : "#F3F4F6")};
+  justify-content: center;
+  align-items: center;
 `;
